@@ -1,12 +1,7 @@
 {% extends 'student_navbar.html' %}
-
-{% block title %} Profile {% endblock %}
-
 {% block css %}
 <style>
 .profile{
-padding: 3%;
-margin-top: 3%;
 margin-bottom: 3%;
 border-radius: 0.5rem;
 background: #fff;
@@ -27,14 +22,8 @@ background: #212529b8;
 </style>
 {% endblock %}
 {% block body %}
-
-<div class="container profile">
+<div class="profile">
         <div class="row">
-            <!-- <div class="col-md-4">
-                <div class="profile-img">
-                    <img src="{{user.student.image.url}}" alt="" width="310px" height="270px">
-                </div>
-            </div> -->
             <div class="col-md-8">
                 <div class="profile-tab">
                     <div class="tab-pane">

@@ -4,7 +4,7 @@
 {% block css %}
 {% endblock %}
 {% block body %}
-<div class="container mt-4">
+<div>
     <form method="POST"> {% csrf_token %}
         {% for i in form %}
         <div class="form-group">

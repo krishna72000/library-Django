@@ -27,13 +27,13 @@ def add_book(request):
 @login_required(login_url = '/admin_login')
 def view_books(request):
     books = Book.objects.all()
-    return render(request, "view_books.html", {'books':books})
+    return render(request, "view_books.html", {'books':books,'title':'Admin Login'})
 
 @login_required(login_url = '/admin_login')
 def view_students(request):
     # User.objects.all().delete() 
     students = Student.objects.all()
-    return render(request, "view_students.html", {'students':students})
+    return render(request, "view_students.html", {'students':students,'title':'View Student'})
 
 @login_required(login_url = '/admin_login')
 def issue_book(request):
@@ -62,26 +62,6 @@ def view_issued_book(request):
             fine=day*5
         books = list(models.Book.objects.filter(isbn=i.isbn))
         students = list(models.Student.objects.filter(user=i.student_id))
-        i=0
-        for l in books:
-            t=(students[i].user,students[i].user_id,books[i].name,books[i].isbn,issuedBooks[0].issued_date,issuedBooks[0].expiry_date,fine)
-            i=i+1
-            details.append(t)
-    return render(request, "view_issued_book.html", {'issuedBooks':issuedBooks, 'details':details,'title':"View Issued Books"})
-
-@login_required(login_url = '/admin_login')
-def view_issued_book(request):
-    issuedBooks = IssuedBook.objects.all()
-    details = []
-    for i in issuedBooks:
-        days = (date.today()-i.issued_date)
-        d=days.days
-        fine=0
-        if d>14:
-            day=d-14
-            fine=day*5
-        books = list(models.Book.objects.filter(isbn=i.isbn))
-        students = list(models.Student.objects.filter(user=i.student_id))
         j=0
         for l in books:
             t=(students[j].user,students[j].user_id,books[j].name,books[j].isbn,i.issued_date,i.expiry_date,fine,i.id)
@@ -93,20 +73,20 @@ def view_issued_book(request):
 def delete_issue(request, myid):
     books = IssuedBook.objects.filter(id=myid)
     books.delete()
-    return redirect("/view_issued_book",{'title':"View Issued Books"})
+    return redirect("/view_issued_book")
 
 @login_required(login_url = '/admin_login')
 def delete_book(request, myid):
     books = Book.objects.filter(id=myid)
     books.delete()
-    return redirect("/view_books",{'title':"View Books"})
+    return redirect("/view_books")
 
 @login_required(login_url = '/admin_login')
 def delete_student(request, myid):
     students = Student.objects.filter(id=myid)
     # students.user.delete()
     students.delete()
-    return redirect("/view_students",{'title':"View Student"})
+    return redirect("/view_students")
 
 
 @login_required(login_url = '/student_login')
@@ -135,7 +115,7 @@ def student_issued_books(request):
 
 @login_required(login_url = '/student_login')
 def profile(request):
-    return render(request, "profile.html")
+    return render(request, "profile.html",{'title':'Profile'})
 
 @login_required(login_url = '/student_login')
 def edit_profile(request):
@@ -176,7 +156,7 @@ def change_password(request):
                 return render(request, "change_password.html", {'currpasswrong':currpasswrong,'title':"Change Password"})
         except:
             pass
-    return render(request, "change_password.html")
+    return render(request, "change_password.html",{'title':"Change Password"})
 
 def student_registration(request):
     if request.method == "POST":

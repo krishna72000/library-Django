@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css">
 
-    <title>{% block title %} {% endblock %}</title>
+    <title>{{title}}</title>
     {% block css %}
     {% endblock %}
   </head>
@@ -46,15 +46,18 @@
           </div>
         </div>
       </nav>
-      <div class="card">
-        <div class="card-header">
-          <h1 class="text-center"><u>{{title}}</u></h1>
-        </div>
-        <div class="card-body">
-          {% block body %}
-          {% endblock %}
+      <div class="container mt-4 mb-5">
+        <div class="card">
+          <div class="card-header">
+            <div><u>{{title}}</u></div>
+          </div>
+          <div class="card-body">
+            {% block body %}
+            {% endblock %}
+          </div>
         </div>
       </div>
+      
       
     <script src="/static/js/bootstrap.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
     
