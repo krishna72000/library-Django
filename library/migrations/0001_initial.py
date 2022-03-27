@@ -36,6 +36,14 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
+            name='Favourite',
+            fields=[
+                ('id', models.AutoField(primary_key=True, serialize=False)),
+                ('student_id', models.CharField(blank=True, max_length=100)),
+                ('book_id', models.CharField(blank=True, max_length=100)),
+            ],
+        ),
+        migrations.CreateModel(
             name='Student',
             fields=[
                 ('id', models.AutoField(primary_key=True, serialize=False)),

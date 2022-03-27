@@ -159,29 +159,24 @@ p.codrops-demos a.current-demo:hover{
 	color: #A5727D;
 	background: hsl(346, 100%, 21%);
 }
-.card-container{
+/* #page{
 position: relative;
-text-align: center;
-width: 30%;
-margin-right: auto;
-margin-left: auto;
-margin-top: 50px;
-/* height: 225px; */
-}
-.special-card {
-  background-color: rgb(64, 59, 59);
-  opacity: 0.6;
-  /* height: 225px; */
-  width:100%;
-  position:absolute;
-  z-index: 999;
-}
-.card-container > header{
-	text-align: center;
-	padding:20px;
-	color: #fff;
-	z-index: 1000;
-	position: absolute;
+display: inline-block;
+height: 225px;
+} */
+.card-container{
+		position: absolute;
+        z-index: 999;
+        margin: 0 auto;
+        left: 0;
+        right: 0;  
+		padding: 20px;      
+        text-align: center;
+        top: 20%; /* Adjust this value to move the positioned div up and down */
+        background: rgba(0, 0, 0, 0.4);
+        font-family: Arial,sans-serif;
+        color: #fff;
+        width: 60%;
 }
 /* Media Queries */
 @media screen and (max-width: 767px) {

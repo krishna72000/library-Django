@@ -21,19 +21,19 @@ def add_book(request):
         books = Book.objects.create(name=name, author=author, isbn=isbn, category=category)
         books.save()
         alert = True
-        return render(request, "add_book.html", {'alert':alert})
-    return render(request, "add_book.html")
+        return render(request, "add_book.html", {'alert':alert,'title':'Add Book'})
+    return render(request, "add_book.html",{'title':'Add Book'})
 
 @login_required(login_url = '/admin_login')
 def view_books(request):
     books = Book.objects.all()
-    return render(request, "view_books.html", {'books':books})
+    return render(request, "view_books.html", {'books':books,'title':'Book List'})
 
 @login_required(login_url = '/admin_login')
 def view_students(request):
     # User.objects.all().delete() 
     students = Student.objects.all()
-    return render(request, "view_students.html", {'students':students})
+    return render(request, "view_students.html", {'students':students,'title':'Student List'})
 
 @login_required(login_url = '/admin_login')
 def issue_book(request):
@@ -47,27 +47,7 @@ def issue_book(request):
             obj.save()
             alert = True
             return render(request, "issue_book.html", {'obj':obj, 'alert':alert})
-    return render(request, "issue_book.html", {'form':form})
-
-@login_required(login_url = '/admin_login')
-def view_issued_book(request):
-    issuedBooks = IssuedBook.objects.all()
-    details = []
-    for i in issuedBooks:
-        days = (date.today()-i.issued_date)
-        d=days.days
-        fine=0
-        if d>14:
-            day=d-14
-            fine=day*5
-        books = list(models.Book.objects.filter(isbn=i.isbn))
-        students = list(models.Student.objects.filter(user=i.student_id))
-        i=0
-        for l in books:
-            t=(students[i].user,students[i].user_id,books[i].name,books[i].isbn,issuedBooks[0].issued_date,issuedBooks[0].expiry_date,fine)
-            i=i+1
-            details.append(t)
-    return render(request, "view_issued_book.html", {'issuedBooks':issuedBooks, 'details':details})
+    return render(request, "issue_book.html", {'form':form,'title':"Issue Books"})
 
 @login_required(login_url = '/admin_login')
 def view_issued_book(request):
@@ -87,7 +67,7 @@ def view_issued_book(request):
             t=(students[j].user,students[j].user_id,books[j].name,books[j].isbn,i.issued_date,i.expiry_date,fine,i.id)
             j=j+1
             details.append(t)
-    return render(request, "view_issued_book.html", {'details':details})
+    return render(request, "view_issued_book.html", {'details':details,'title':"View Issued Books"})
 
 @login_required(login_url = '/admin_login')
 def delete_issue(request, myid):
@@ -110,6 +90,12 @@ def delete_student(request, myid):
 
 
 @login_required(login_url = '/student_login')
+def student_books_search(request):
+    books = Book.objects.all()
+    return render(request, "student_books_search.html", {'books':books,'title':"Book Search"})
+
+
+@login_required(login_url = '/student_login')
 def student_issued_books(request):
     student = Student.objects.filter(user_id=request.user.id)
     issuedBooks = IssuedBook.objects.filter(student_id=student[0].user_id)
@@ -125,11 +111,18 @@ def student_issued_books(request):
         for book in books:
             t=(request.user.id, request.user.get_full_name, book.name,book.author,issuedBooks[0].issued_date, issuedBooks[0].expiry_date, fine)
             li1.append(t)
-    return render(request,'student_issued_books.html',{'li1':li1})
+    return render(request,'student_issued_books.html',{'li1':li1,'title':"Issued Books"})
+
+@login_required(login_url = '/student_login')
+def student_add_favourite(request):
+    return render(request, "coming_soon.html",{'title':'Add Favourite Books'})
+
+def student_favourite_book(request):
+    return render(request, "coming_soon.html",{'title':'Favourite Books'})
 
 @login_required(login_url = '/student_login')
 def profile(request):
-    return render(request, "profile.html")
+    return render(request, "profile.html",{'title':'Profile'})
 
 @login_required(login_url = '/student_login')
 def edit_profile(request):
@@ -149,8 +142,8 @@ def edit_profile(request):
         student.user.save()
         student.save()
         alert = True
-        return render(request, "edit_profile.html", {'alert':alert})
-    return render(request, "edit_profile.html")
+        return render(request, "edit_profile.html", {'alert':alert,'title':"Edit Profile"})
+    return render(request, "edit_profile.html",{'title':"Edit Profile"})
 
 
 @login_required(login_url = '/student_login')
@@ -164,13 +157,13 @@ def change_password(request):
                 u.set_password(new_password)
                 u.save()
                 alert = True
-                return render(request, "change_password.html", {'alert':alert})
+                return render(request, "change_password.html", {'alert':alert,'title':"Change Password"})
             else:
                 currpasswrong = True
-                return render(request, "change_password.html", {'currpasswrong':currpasswrong})
+                return render(request, "change_password.html", {'currpasswrong':currpasswrong,'title':"Change Password"})
         except:
             pass
-    return render(request, "change_password.html")
+    return render(request, "change_password.html",{'title':"Change Password"})
 
 def student_registration(request):
     if request.method == "POST":
@@ -189,8 +182,8 @@ def student_registration(request):
         student.save()
         user.save()
         alert = True
-        return render(request, "student_registration.html", {'alert':alert})
-    return render(request, "student_registration.html")
+        return render(request, "student_registration.html", {'alert':alert,'title':"Register Student"})
+    return render(request, "student_registration.html",{'title':"Register Student"})
 
 def student_login(request):
     if request.method == "POST":
@@ -206,8 +199,8 @@ def student_login(request):
                 return redirect("/profile")
         else:
             alert = True
-            return render(request, "student_login.html", {'alert':alert})
-    return render(request, "student_login.html")
+            return render(request, "student_login.html", {'alert':alert,'title':"Student Login"})
+    return render(request, "student_login.html",{'title':"Student Login"})
 
 def admin_login(request):
     if request.method == "POST":
@@ -218,13 +211,13 @@ def admin_login(request):
         if user is not None:
             login(request, user)
             if request.user.is_superuser:
-                return redirect("/add_book")
+                return redirect("/view_students")
             else:
                 return HttpResponse("You are not an admin.")
         else:
             alert = True
-            return render(request, "admin_login.html", {'alert':alert})
-    return render(request, "admin_login.html")
+            return render(request, "admin_login.html", {'alert':alert,'title':"Admin Login"})
+    return render(request, "admin_login.html",{'title':"Admin Login"})
 
 def Logout(request):
     logout(request)

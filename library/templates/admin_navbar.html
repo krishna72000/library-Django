@@ -4,81 +4,133 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
-    <link rel="stylesheet" href="/static/css/bootstrap.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
-    
-    <title>{% block title %} {% endblock %}</title>
+    <link href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+  
+    <!-- Vendor CSS Files -->
+    <link href="/static/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="/static/assets/vendor/simple-datatables/style.css" rel="stylesheet">
+  
+    <!-- Template Main CSS File -->
+    <link href="/static/assets/css/style.css" rel="stylesheet">
+    <title>{{title}}</title>
     {% block css %}
     {% endblock %}
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
-        <div class="container-fluid">
-          <a class="navbar-brand" href="#">Library Management System</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
-              <li class="nav-item">
-                <a class="nav-link" aria-current="page" href="/view_students/">Students</a>
-              </li>
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  Books
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <li><a class="dropdown-item" href="/add_book/">Add Books</a></li>
-                  <li><a class="dropdown-item" href="/view_books/">View All Books</a></li>
-                </ul>
-              </li>
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  Issue Book
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <li><a class="dropdown-item" href="/issue_book/">Issue A Book</a></li>
-                  <li><a class="dropdown-item" href="/view_issued_book/">View All Issued Books</a></li>
-                </ul>
-              </li>
-              &nbsp;&nbsp;&nbsp;
-              <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/logout/">Logout</a>
-              </li>
-              <li class="nav-item">
-                <a style="font-weight:600; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: large;" class="nav-link active" href="#">Welcome Admin: {{request.user}}</a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </nav>
-      {% block body %}
-      {% endblock %}
-      <script src="/static/js/bootstrap.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
-    
-    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-    <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
+    <body>
 
-    {% block js %}
-    <script>
-      $(document).ready(function () {
-        $('#example').DataTable({
-          dom: 'Bfrtip',
-          buttons: [
-            'copyHtml5',
-            'excelHtml5',
-            'csvHtml5',
-            'pdfHtml5'
-          ]
-        });
-      });
-    </script>
-    {% endblock %}
+      <!-- ======= Header ======= -->
+      <header id="header" class="header fixed-top d-flex align-items-center">
+    
+        <div class="d-flex align-items-center justify-content-between">
+          <a href="/view_students" class="logo d-flex align-items-center">
+            <img src="/static/assets/img/logo.png" alt="">
+            <span class="d-none d-lg-block">LMS</span>
+          </a>
+          <i class="bi bi-list toggle-sidebar-btn"></i>
+        </div><!-- End Logo -->
+    
+        <!-- <div class="search-bar">
+          <form class="search-form d-flex align-items-center" method="POST" action="#">
+            <input type="text" name="query" placeholder="Search" title="Enter search keyword">
+            <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+          </form>
+        </div> -->
+    
+        <nav class="header-nav ms-auto">
+          <ul class="d-flex align-items-center">
+    
+            <li class="nav-item d-block d-lg-none">
+              <a class="nav-link nav-icon search-bar-toggle " href="#">
+                <i class="bi bi-search"></i>
+              </a>
+            </li><!-- End Search Icon-->
+            <li class="nav-item dropdown pe-3">
+    
+              <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+                <i style="font-size: 25px;" class="bi bi-person-circle"></i>
+                <span class="d-none d-md-block dropdown-toggle ps-2">{{request.user}}</span>
+              </a><!-- End Profile Iamge Icon -->
+    
+              <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+                <li class="dropdown-header">
+                  <h6>{{request.user}}</h6>
+                  <span>admin</span>
+                </li>
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
+                <li>
+                  <a class="dropdown-item d-flex align-items-center" href="/logout">
+                    <i class="bi bi-box-arrow-right"></i>
+                    <span>Sign Out</span>
+                  </a>
+                </li>
+    
+              </ul><!-- End Profile Dropdown Items -->
+            </li><!-- End Profile Nav -->
+    
+          </ul>
+        </nav><!-- End Icons Navigation -->
+      </header>
+        <aside id="sidebar" class="sidebar">
+          <ul class="sidebar-nav" id="sidebar-nav">
+     
+            <li class="nav-item">
+              <a class="nav-link collapsed" href="/view_students">
+                <i class="bi bi-person"></i>
+                <span>Students</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link collapsed" href="/add_book">
+                <i class="bi bi-bookmark-plus-fill"></i><span>Add Books</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link collapsed" href="/view_books">
+                <i class="bi bi-bookmark-fill"></i><span>Book List</span>
+              </a>
+            </li>
+              <li class="nav-item">
+                <a class="nav-link collapsed" href="/issue_book">
+                  <i class="bi bi-bookmark-star-fill"></i><span>Issue A Book</span>
+                 </a>
+              </li><!-- End Contact Page Nav -->
+            <li class="nav-item">
+              <a class="nav-link collapsed" href="/view_issued_book">
+                <i class="bi bi-bookmark-check-fill"></i><span>View Issued Books</span>
+              </a>
+            </li><!-- End Contact Page Nav -->
+          </ul>
+        </aside><!-- End Sidebar-->
+        <main id="main" class="main">
+          <div class="container mt-4 mb-5">
+            <div class="card">
+              <div class="card-header">
+                <h5>{{title}}</h5>
+              </div>
+              <div class="card-body">
+                {% block body %}
+                {% endblock %}
+              </div>
+            </div>
+          </div>
+        </main>
+
+        <!-- Vendor JS Files -->
+  <!-- <script src="/static/assets/vendor/apexcharts/apexcharts.min.js"></script> -->
+  <script src="/static/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <!-- <script src="/static/assets/vendor/echarts/echarts.min.js"></script>
+  <script src="/static/assets/vendor/quill/quill.min.js"></script> -->
+  <script src="/static/assets/vendor/simple-datatables/simple-datatables.js"></script>
+  <script src="/static/assets/vendor/tinymce/tinymce.min.js"></script>
+  <!-- <script src="/static/assets/vendor/php-email-form/validate.js"></script> -->
+
+  <!-- Template Main JS File -->
+  <script src="/static/assets/js/main.js"></script>
+
   </body>
 </html>

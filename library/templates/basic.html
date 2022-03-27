@@ -1,43 +1,62 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="css/demo.css" />
-    <link rel="stylesheet" type="text/css" href="css/style1.css" />
-    <link rel="stylesheet" href="/static/css/bootstrap.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
-    <title>{% block title %} {% endblock %}</title>
-    {% block css %}
-    {% endblock %}
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- <link rel="stylesheet" href="css/demo.css" />
+    <link rel="stylesheet" href="css/style1.css" />
+    <link rel="stylesheet" href="/static/assets/css/bootstrap.css" crossorigin="anonymous"> -->
+
+    <link
+      href="/static/assets/vendor/bootstrap/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="/static/assets/vendor/bootstrap-icons/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <link href="/static/assets/css/style.css" rel="stylesheet" />
+    <title>{{title}}</title>
+    {% block css %} {% endblock %}
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
-        <div class="container-fluid">
-          <a class="navbar-brand" href="/">Library Management System</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
-              <li class="nav-item">
-                <a class="nav-link active" href="/admin_login/">Admin Login</a>
-              </li>
-              &nbsp;&nbsp;&nbsp;
-              <li class="nav-item">
-                <a class="nav-link active" href="/student_login/">Student Login</a>
-              </li>
-              &nbsp;&nbsp;&nbsp;
-              <li class="nav-item">
-                <a class="nav-link active" href="/student_registration/">Register As Student</a>
-              </li>
-            </ul>
-          </div>
-        </div>
+    <header id="header" class="header fixed-top d-flex align-items-center">
+      <div class="d-flex align-items-center justify-content-between">
+        <a href="/" class="logo d-flex align-items-center">
+          <img src="assets/img/logo.png" alt="" />
+          <span class="d-none d-lg-block">LMS</span>
+        </a>
+      </div>
+      <!-- End Logo -->
+
+      <nav class="header-nav ms-auto">
+        <ul class="d-flex align-items-center">
+          <li class="nav-item">
+            <a class="nav-link" href="/admin_login">Admin Login</a>
+          </li>
+          <!-- End Search Icon-->
+          <li class="nav-item d-block">
+            <a class="nav-link" href="/student_login">Student Login</a>
+          </li>
+          <!-- End Search Icon-->
+          <li class="nav-item d-block">
+            <a class="nav-link" href="/student_registration">Register As Student</a>
+          </li>
+          <!-- End Search Icon-->
+        </ul>
       </nav>
-      {% block body %}
-      {% endblock %}
-    <script src="/static/js/bootstrap.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
-    {% block js %}
-    {% endblock %}
+      <!-- End Icons Navigation -->
+    </header>
+    <!-- End Header -->
+    <main>
+      <section class="section" style="margin-top: 80px">
+        {% block body %} {% endblock %}
+      </section>
+    </main>
+
+    <script src="/static/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/assets/vendor/php-email-form/validate.js"></script>
+    <!-- <script src="/static/js/bootstrap.js" crossorigin="anonymous"></script> -->
+    {% block js %} {% endblock %}
   </body>
 </html>

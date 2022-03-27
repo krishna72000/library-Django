@@ -1,0 +1,30 @@
+{% extends 'student_navbar.html' %}
+{% load static %}
+{% block css %}
+{% endblock %}
+{% block body %}
+    <table class="table datatable">
+        <thead>
+            <tr>
+                <th>Sr.No</th>
+                <th>Book Name</th>
+                <th>Author</th>
+                <th>ISBN Number</th>
+                <th>Category</th>
+                <th>Favourite</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for book in books %}
+            <tr>
+                <td>{{forloop.counter}}.</td>
+                <td>{{book.name}}</td>
+                <td>{{book.author}}</td>
+                <td>{{book.isbn}}</td>
+                <td>{{book.category}}</td>
+                <td><a class="btn btn-outline-danger" href="/student_add_favourite"><i class="bi bi-heart"> ADD</i></a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
