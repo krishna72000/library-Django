@@ -21,19 +21,19 @@ def add_book(request):
         books = Book.objects.create(name=name, author=author, isbn=isbn, category=category)
         books.save()
         alert = True
-        return render(request, "add_book.html", {'alert':alert})
-    return render(request, "add_book.html")
+        return render(request, "add_book.html", {'alert':alert,'title':'Add Book'})
+    return render(request, "add_book.html",{'title':'Add Book'})
 
 @login_required(login_url = '/admin_login')
 def view_books(request):
     books = Book.objects.all()
-    return render(request, "view_books.html", {'books':books,'title':'Admin Login'})
+    return render(request, "view_books.html", {'books':books,'title':'Book List'})
 
 @login_required(login_url = '/admin_login')
 def view_students(request):
     # User.objects.all().delete() 
     students = Student.objects.all()
-    return render(request, "view_students.html", {'students':students,'title':'View Student'})
+    return render(request, "view_students.html", {'students':students,'title':'Student List'})
 
 @login_required(login_url = '/admin_login')
 def issue_book(request):
@@ -112,6 +112,13 @@ def student_issued_books(request):
             t=(request.user.id, request.user.get_full_name, book.name,book.author,issuedBooks[0].issued_date, issuedBooks[0].expiry_date, fine)
             li1.append(t)
     return render(request,'student_issued_books.html',{'li1':li1,'title':"Issued Books"})
+
+@login_required(login_url = '/student_login')
+def student_add_favourite(request):
+    return render(request, "coming_soon.html",{'title':'Add Favourite Books'})
+
+def student_favourite_book(request):
+    return render(request, "coming_soon.html",{'title':'Favourite Books'})
 
 @login_required(login_url = '/student_login')
 def profile(request):
@@ -204,7 +211,7 @@ def admin_login(request):
         if user is not None:
             login(request, user)
             if request.user.is_superuser:
-                return redirect("/add_book")
+                return redirect("/view_students")
             else:
                 return HttpResponse("You are not an admin.")
         else:
