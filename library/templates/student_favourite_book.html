@@ -1,0 +1,31 @@
+{% extends 'student_navbar.html' %}
+{% load static %}
+{% block css %}
+{% endblock %}
+{% block body %}
+<div>
+    <table class="table datatable">
+        <thead>
+            <tr class="text-center">
+                <th>Sr.No</th>
+                <th>Book Name</th>
+                <th>Author</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in li1 %}
+            <tr class="text-center">
+                <td>{{forloop.counter}}.</td>
+                <td>{{i.0}}</td>
+                <td>{{i.1}}</td>
+                <td><a href="/student_delete_favourite/?book_id={{i.2}}" class="btn btn-danger"
+                        onclick="return confirm('Are you sure you want to remove this favourite book?')">Delete</a>
+                </td>
+
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -24,6 +24,10 @@ class Student(models.Model):
     def __str__(self):
         return str(self.user) + " ["+str(self.branch)+']' + " ["+str(self.classroom)+']' + " ["+str(self.roll_no)+']'
 
+class Favourite(models.Model):
+    id = models.AutoField(primary_key=True)
+    student_id = models.CharField(max_length=100, blank=True)
+    book_id = models.CharField(max_length=100, blank=True) 
 
 def expiry():
     return datetime.today() + timedelta(days=14)

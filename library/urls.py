@@ -12,6 +12,7 @@ urlpatterns = [
     path("student_issued_books/", views.student_issued_books, name="student_issued_books"),
     path("student_favourite_book/", views.student_favourite_book, name="student_favourite_book"),
     path("student_add_favourite/", views.student_add_favourite, name="student_add_favourite"),
+    path("student_delete_favourite/", views.student_delete_favourite, name="student_delete_favourite"),
     path("profile/", views.profile, name="profile"),
     path("edit_profile/", views.edit_profile, name="edit_profile"),
 

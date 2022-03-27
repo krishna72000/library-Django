@@ -10,7 +10,7 @@
                 <th>Book Name</th>
                 <th>Author</th>
                 <th>ISBN Number</th>
-                <th>Category</th>
+                <th>Year</th>
                 <th>Favourite</th>
             </tr>
         </thead>
@@ -22,7 +22,7 @@
                 <td>{{book.author}}</td>
                 <td>{{book.isbn}}</td>
                 <td>{{book.category}}</td>
-                <td><a class="btn btn-outline-danger" href="/student_add_favourite"><i class="bi bi-heart"> ADD</i></a></td>
+                <td><a class="btn btn-outline-danger" href="/student_add_favourite/?book_id={{book.id}}"><i class="bi bi-heart"> ADD</i></a></td>
             </tr>
             {% endfor %}
         </tbody>

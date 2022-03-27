@@ -115,10 +115,29 @@ def student_issued_books(request):
 
 @login_required(login_url = '/student_login')
 def student_add_favourite(request):
-    return render(request, "coming_soon.html",{'title':'Add Favourite Books'})
+    # Favourite.objects.all().delete()
+    book_id = request.GET['book_id']
+    Favourite.objects.filter(student_id=request.user.id,book_id=book_id).delete()
+    Favourite.objects.create(student_id=request.user.id,book_id=book_id)
+    return redirect("/student_books_search")
+
+@login_required(login_url = '/student_login')
+def student_delete_favourite(request):
+    book_id = request.GET['book_id']
+
+    Favourite.objects.filter(student_id=request.user.id,id=book_id).delete()
+    return redirect("/student_favourite_book")
 
 def student_favourite_book(request):
-    return render(request, "coming_soon.html",{'title':'Favourite Books'})
+    
+    f_book = Favourite.objects.filter(student_id=request.user.id)
+    li1 = []
+    for i in f_book:
+        iBooks = Book.objects.filter(id=i.book_id)
+        for book in iBooks:
+            t=(book.name,book.author,i.id)
+            li1.append(t)
+    return render(request, "student_favourite_book.html",{'li1':li1, 'title':'Favourite Books'})
 
 @login_required(login_url = '/student_login')
 def profile(request):
