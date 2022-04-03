@@ -7,30 +7,53 @@
 <div class="container">
     <form method="POST"> {% csrf_token %}
     <div class="row mt-4">
-        <div class="form-group col-md-12">
+        <div class="form-group col-md-6">
             <label><i style="font-weight: bold;">Book Name</i></label>
-            <input type="text" class="form-control mt-2" name="name" placeholder="Enter name of the Book" required>
+            <input type="text" class="form-control mt-2" name="title" placeholder="Enter name of the Book" required>
         </div>
-    </div>
-
-    <div class="row mt-4">
-        <div class="form-group col-md-12">
+        <div class="form-group col-md-6">
             <label><i style="font-weight: bold;">Author Name</i></label>
-            <input type="text" class="form-control mt-2" name="author" placeholder="Enter name of the Author" required>
+            <input type="text" class="form-control mt-2" name="authors" placeholder="Enter name of the Author" required>
         </div>
     </div>
-
     <div class="row mt-4">
-        <div class="form-group col-md-12">
+        <div class="form-group col-md-6">
             <label><i style="font-weight: bold;">ISBN Number</i></label>
             <input type="number" class="form-control mt-2" name="isbn" placeholder="Enter ISBN number of the book" required>
         </div>
+        <div class="form-group col-md-6">
+            <label><i style="font-weight: bold;">Category</i></label>
+            <input type="text" class="form-control mt-2" name="category" placeholder="Enter category of the book" required>
+        </div>
     </div>
-
     <div class="row mt-4">
-        <div class="form-group col-md-12">
-            <label><i style="font-weight: bold;">Year</i></label>
-            <input type="text" class="form-control mt-2" name="category" placeholder="Enter issued year of the book" required>
+        <div class="form-group col-md-6">
+            <label><i style="font-weight: bold;">Publish</i></label>
+            <input type="date" class="form-control mt-2" name="publication_date" placeholder="Enter publication date of the book" required>
+        </div>
+        <div class="form-group col-md-6">
+            <label><i style="font-weight: bold;">Publisher</i></label>
+            <input type="text" class="form-control mt-2" name="publisher" placeholder="Enter publisher of the book" required>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="form-group col-md-6">
+            <label><i style="font-weight: bold;">Language Code</i></label>
+            <input type="text" class="form-control mt-2" name="language_code" placeholder="Enter language code of the book" required>
+        </div>
+        <div class="form-group col-md-6">
+            <label><i style="font-weight: bold;">Number of pages</i></label>
+            <input type="text" class="form-control mt-2" name="num_pages" placeholder="Enter number of pages in the book" required>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="form-group col-md-6">
+            <label><i style="font-weight: bold;">Average rating</i></label>
+            <input type="number" min="0" max="5.0" step="0.1" class="form-control mt-2" name="average_rating" placeholder="Enter Average rating of the book" required>
+        </div>
+        <div class="form-group col-md-6">
+            <label><i style="font-weight: bold;">Image url</i></label>
+            <input type="text" class="form-control mt-2" name="image_url" placeholder="Enter image url of the book" required>
         </div>
     </div>
     <button type="submit" class="btn btn-outline-primary mt-4">Add Book</button>

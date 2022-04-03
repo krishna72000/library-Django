@@ -21,6 +21,9 @@ Reset migration
 
         find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
         find . -path "*/migrations/*.pyc"  -delete
+        rm .\library\__pycache__\* 
+        rm .\library\migrations\__pycache__\*
+        rm .\library\migrations\0001_initial.py
 
 2. Drop the current database, or delete the db.sqlite3 if it is your case.
 3. Create the initial migrations and generate the database schema:

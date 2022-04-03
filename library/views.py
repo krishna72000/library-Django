@@ -1,3 +1,9 @@
+import codecs
+import csv
+
+from django.core.files.base import ContentFile
+from django.core.files.storage import FileSystemStorage
+
 from library.forms import IssueBookForm
 from django.shortcuts import redirect, render,HttpResponse
 from .models import *
@@ -6,19 +12,85 @@ from django.contrib.auth import authenticate, login, logout
 from . import forms, models
 from datetime import date
 from django.contrib.auth.decorators import login_required
+fs = FileSystemStorage(location='tmp/')
 
 def index(request):
     return render(request, "index.html")
 
 @login_required(login_url = '/admin_login')
+def upload_book(request):
+    if request.method == "POST":
+        file = request.FILES["csvbook"]
+        content = file.read()  # these are bytes
+        file_content = ContentFile(content)
+        file_name = fs.save(
+            "_tmp.csv", file_content
+        )
+        tmp_file = fs.path(file_name)
+
+        csv_file = open(tmp_file, errors="ignore")
+        reader = csv.reader(csv_file)
+        next(reader)
+        
+        book_list = []
+        for id_, row in enumerate(reader):
+            (
+                id,
+                title,
+                authors,
+                average_rating,
+                isbn,
+                language_code,
+                num_pages,
+                publication_date,
+                category,
+                publisher,
+                image_url,
+            ) = row
+            book_list.append(
+                Book(
+                    title=title,
+                    authors=authors,
+                    isbn=isbn,
+                    language_code=language_code,
+                    average_rating=average_rating,
+                    num_pages=num_pages,
+                    publication_date=publication_date,
+                    publisher=publisher,
+                    category=category,
+                    image_url=image_url
+                )
+            )
+        Book.objects.bulk_create(book_list)
+        alert = True
+        return render(request, "add_ubook.html", {'alert':alert,'title':'Upload Book'})
+    return render(request, "add_ubook.html",{'title':'Upload Book'})
+
+@login_required(login_url = '/admin_login')
 def add_book(request):
     if request.method == "POST":
-        name = request.POST['name']
-        author = request.POST['author']
+        title = request.POST['title']
+        author = request.POST['authors']
         isbn = request.POST['isbn']
         category = request.POST['category']
-
-        books = Book.objects.create(name=name, author=author, isbn=isbn, category=category)
+        language_code = request.POST['language_code']
+        average_rating = request.POST['average_rating']
+        num_pages = request.POST['num_pages']
+        publication_date = request.POST['publication_date']
+        publisher = request.POST['publisher']
+        image_url = request.POST['image_url']
+        books = Book.objects.create(
+                    title=title,
+                    authors=author,
+                    isbn=isbn,
+                    language_code=language_code,
+                    average_rating=average_rating,
+                    num_pages=num_pages,
+                    publication_date=publication_date,
+                    publisher=publisher,
+                    category=category,
+                    image_url=image_url
+                )
         books.save()
         alert = True
         return render(request, "add_book.html", {'alert':alert,'title':'Add Book'})
@@ -135,7 +207,7 @@ def student_favourite_book(request):
     for i in f_book:
         iBooks = Book.objects.filter(id=i.book_id)
         for book in iBooks:
-            t=(book.name,book.author,i.id)
+            t=(book.title,book.author,i.id)
             li1.append(t)
     return render(request, "student_favourite_book.html",{'li1':li1, 'title':'Favourite Books'})
 

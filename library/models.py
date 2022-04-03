@@ -1,17 +1,25 @@
+from contextlib import nullcontext
+from unicodedata import category
 from django.db import models
 from django.contrib.auth.models import User
 from datetime import datetime,timedelta
-
+from django.utils.translation import gettext as _
 
 class Book(models.Model):
-    id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=200)
-    author = models.CharField(max_length=200)
-    isbn = models.PositiveIntegerField()
-    category = models.CharField(max_length=50)
-
+    id = models.AutoField(_("id"),primary_key=True)
+    title = models.CharField(_("title"), max_length=255)
+    authors = models.CharField(_("authors"), max_length=255)
+    average_rating = models.FloatField(_("average rating"))
+    isbn = models.CharField(_("isbn"), max_length=150)
+    language_code = models.CharField(_("language code"), max_length=10)
+    num_pages = models.IntegerField(_("number of pages"))
+    publication_date = models.CharField(_("publication date"), max_length=15)
+    publisher = models.CharField(_("publisher"), max_length=150)
+    image_url = models.CharField(_("image_url"), max_length=250)
+    category = models.CharField(_("category"), max_length=50)
+    
     def __str__(self):
-        return str(self.name) + " ["+str(self.isbn)+']'
+        return str(self.title) + " ["+str(self.isbn)+']'
 
 class Student(models.Model):
     id = models.AutoField(primary_key=True)
