@@ -1,4 +1,5 @@
 from contextlib import nullcontext
+from random import randint
 from unicodedata import category
 from django.db import models
 from django.contrib.auth.models import User
@@ -20,7 +21,7 @@ class Book(models.Model):
     
     def __str__(self):
         return str(self.title) + " ["+str(self.isbn)+']'
-
+        
 class Student(models.Model):
     id = models.AutoField(primary_key=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE)

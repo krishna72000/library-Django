@@ -17,6 +17,10 @@ fs = FileSystemStorage(location='tmp/')
 def index(request):
     return render(request, "index.html")
 
+def book_list(request):
+    bookslist = Book.objects.order_by("?")[:100]
+    return render(request, "booklist.html", {'bookslist':bookslist,'title':'Book List'})
+
 @login_required(login_url = '/admin_login')
 def upload_book(request):
     if request.method == "POST":
@@ -100,6 +104,9 @@ def add_book(request):
 def view_books(request):
     books = Book.objects.all()
     return render(request, "view_books.html", {'books':books,'title':'Book List'})
+
+
+
 
 @login_required(login_url = '/admin_login')
 def view_students(request):

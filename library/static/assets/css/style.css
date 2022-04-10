@@ -1098,3 +1098,11 @@ h6 {
 .form-group {
   margin-bottom: 0.5em;
 }
+
+.text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
