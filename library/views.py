@@ -10,6 +10,7 @@ from .models import *
 from .forms import IssueBookForm
 from django.contrib.auth import authenticate, login, logout
 from . import forms, models
+from django.db.models import Q
 from datetime import date
 from django.contrib.auth.decorators import login_required
 fs = FileSystemStorage(location='tmp/')
@@ -173,6 +174,17 @@ def student_books_search(request):
     books = Book.objects.all()
     return render(request, "student_books_search.html", {'books':books,'title':"Book Search"})
 
+@login_required(login_url = '/student_login')
+def recommended(request):
+    favourite = Favourite.objects.raw('''
+        SELECT Book.category as fav FROM Favourite LEFT JOIN Book ON Book.id=Favourite.book_id WHERE student_id='''+ str(request.user.id) +''' GROUP BY Book.id
+        ''')
+    # books = Book.objects.filter()
+    
+    print(favourite)
+    return render(request, "student_books_search.html", {'books':favourite,'title':"Book Search"})
+
+
 
 @login_required(login_url = '/student_login')
 def student_issued_books(request):
@@ -214,7 +226,7 @@ def student_favourite_book(request):
     for i in f_book:
         iBooks = Book.objects.filter(id=i.book_id)
         for book in iBooks:
-            t=(book.title,book.author,i.id)
+            t=(book.title,book.authors,i.id)
             li1.append(t)
     return render(request, "student_favourite_book.html",{'li1':li1, 'title':'Favourite Books'})
 

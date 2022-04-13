@@ -1,8 +1,6 @@
 {% extends 'basic.html' %} {% load static %} {% block title %} Library
 Management System {% endblock %} {% block css %} {% endblock %} {% block body %}
-<!-- <link rel="stylesheet" type="text/x-scss" href="/static/css/rating1.scss" /> -->
-<!-- <link rel="stylesheet" type="text/css" href="/static/css/rating.css" /> -->
-<!-- <link rel="stylesheet" type="text/css" href="/static/css/bookcard.css" /> -->
+
 <div class="container mt-4 mb-5">
   <h5>{{title}}</h5>
   <div class="container">
@@ -25,7 +23,16 @@ Management System {% endblock %} {% block css %} {% endblock %} {% block body %}
               {{book.authors}}
             </div>
             <div>{{book.publication_date}}</div>
-            <div class="Stars" style="--rating: {{book.average_rating}};" aria-label="Rating of this product is 2.3 out of 5."></div>
+            <div
+              class="c-rating c-rating--regular"
+              data-rating-value="{{book.average_rating}}"
+            >
+              <button>1</button>
+              <button>2</button>
+              <button>3</button>
+              <button>4</button>
+              <button>5</button>
+            </div>
             <div class="small text-white font-italic text-ellipsis">
               {{book.category}}
             </div>
@@ -36,27 +43,4 @@ Management System {% endblock %} {% block css %} {% endblock %} {% block body %}
     </div>
   </div>
 </div>
-<style>
-  @charset "UTF-8";
-:root {
-  --star-size: 20px;
-  --star-color: #fff;
-  --star-background: #fc0;
-}
-
-.Stars {
-  --percent: calc(var(--rating) / 5 * 100%);
-  display: inline-block;
-  font-size: var(--star-size);
-  font-family: Times;
-  line-height: 1;
-}
-.Stars::before {
-  content: "★★★★★";
-  letter-spacing: 3px;
-  background: linear-gradient(90deg, var(--star-background) var(--percent), var(--star-color) var(--percent));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-</style>
 {% endblock %}
