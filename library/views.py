@@ -106,13 +106,7 @@ def add_book(request):
     return render(request, "add_book.html",{'title':'Add Book'})
 
 @login_required(login_url = '/admin_login')
-def view_books(request):
-    books = Book.objects.all()
-    return render(request, "view_books.html", {'books':books,'title':'Book List'})
-
-@login_required(login_url = '/admin_login')
 def getbooks(request):
-        print(request)
         context = {'segment': 'transactions'}
         filter_params = None
         search = request.GET.get('search')
@@ -121,15 +115,17 @@ def getbooks(request):
             filter_params = None
             if search.strip():
                 filter_params = Q(title=search.strip())
-                filter_params |= Q(authors=search.strip())
-                filter_params |= Q(isbn=search.strip())
-                filter_params |= Q(category=search.strip())
-
-        transactions = bookObject.filter(filter_params) if filter_params else bookObject.all()
-        context['transactions'], context['info'] = set_pagination(request, transactions)
-        if not context['transactions']:
+                # filter_params |= Q(authors=search.strip())
+                # filter_params |= Q(isbn=search.strip())
+                # filter_params |= Q(category=search.strip())
+        
+        transactions = bookObject.filter(filter_params).order_by('id') if filter_params else bookObject.get_queryset().order_by('id')
+        # print(transactions)
+        
+        booklist,pagination, context['info'] = set_pagination(request, transactions)
+        if not booklist:
             return False, context['info']
-        return render(context, 'listbook.html')
+        return render(request, 'listbook.html',{'booklists':booklist,'pagination':pagination,'title':'Book List'})
 
 
 @login_required(login_url = '/admin_login')
@@ -192,20 +188,51 @@ def delete_student(request, myid):
     return redirect("/view_students")
 
 
+# @login_required(login_url = '/student_login')
+# def student_books_search(request):
+#     books = Book.objects.all()
+#     return render(request, "student_books_search.html", {'books':books,'title':"Book Search"})
+
 @login_required(login_url = '/student_login')
 def student_books_search(request):
-    books = Book.objects.all()
-    return render(request, "student_books_search.html", {'books':books,'title':"Book Search"})
+        context = {'segment': 'transactions'}
+        filter_params = None
+        search = request.GET.get('search')
+        print(search)
+        bookObject = Book.objects
+        if search:
+            filter_params = None
+            if search.strip():
+                filter_params = Q(title__contains=search.strip())
+                filter_params |= Q(authors__contains=search.strip())
+                filter_params |= Q(isbn__contains=search.strip())
+                filter_params |= Q(category__contains=search.strip())
+        else:
+            search=''
+
+        favouritBook = []
+        f_book = Favourite.objects.filter(student_id=request.user.id)
+        for i in f_book:
+            favouritBook.append(int(i.book_id))
+        
+
+        transactions = bookObject.filter(filter_params).order_by('id') if filter_params else bookObject.get_queryset().order_by('id')
+        booklist, context['info'] = set_pagination(request, transactions)
+        return render(request, 'student_books_search.html',{'booklists':booklist,'title':'Book List','favouritBook':favouritBook,'searchkey':search})
+
+
 
 @login_required(login_url = '/student_login')
 def recommended(request):
-    favourite = Favourite.objects.raw('''
-        SELECT Book.category as fav FROM Favourite LEFT JOIN Book ON Book.id=Favourite.book_id WHERE student_id='''+ str(request.user.id) +''' GROUP BY Book.id
+    favourite = Book.objects.raw('''
+        SELECT library_book.* FROM library_book WHERE category IN (SELECT library_book.category
+        FROM library_favourite LEFT JOIN library_book ON library_book.id=library_favourite.book_id WHERE student_id='''+ str(request.user.id) +''' 
+        GROUP BY library_book.id)
         ''')
-    # books = Book.objects.filter()
-    
-    print(favourite)
-    return render(request, "student_books_search.html", {'books':favourite,'title':"Book Search"})
+
+    for fav in favourite:
+        print(fav)
+    return render(request, "student_rec_book.html", {'bookslist':favourite,'title':"Recommended Book"})
 
 
 
@@ -238,7 +265,6 @@ def student_add_favourite(request):
 @login_required(login_url = '/student_login')
 def student_delete_favourite(request):
     book_id = request.GET['book_id']
-
     Favourite.objects.filter(student_id=request.user.id,id=book_id).delete()
     return redirect("/student_favourite_book")
 

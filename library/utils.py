@@ -5,13 +5,14 @@ from django.core.paginator import Paginator
 from django.template.loader import render_to_string
 
 
-def set_pagination(request, items, item_numer=10):
+def set_pagination(request, items, item_numer=20):
     if not items:
         return True, "These is no items"
 
     params = request.GET
     item_len = len(items)
-    page =  1
+    page = int(params.get("page")) if "page" in params else 1
+    
     # if 'page' in params:
         # page = int(params["page"])
     pages_number = math.ceil(item_len / item_numer)
@@ -21,7 +22,6 @@ def set_pagination(request, items, item_numer=10):
 
     paginator = Paginator(items, item_numer)
     items = paginator.get_page(page)
-
     url_params = dict()
     for key in params:
         if key != 'page':

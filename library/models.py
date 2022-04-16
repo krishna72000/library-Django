@@ -1,5 +1,3 @@
-from contextlib import nullcontext
-from random import randint
 from unicodedata import category
 from django.db import models
 from django.contrib.auth.models import User
@@ -37,6 +35,7 @@ class Favourite(models.Model):
     id = models.AutoField(primary_key=True)
     student_id = models.CharField(max_length=100, blank=True)
     book_id = models.CharField(max_length=100, blank=True) 
+    # book_id = models.ForeignKey(Book,on_delete=models.CASCADE)
 
 def expiry():
     return datetime.today() + timedelta(days=14)
