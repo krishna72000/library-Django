@@ -6,7 +6,7 @@ from django.core.files.storage import FileSystemStorage
 from django.http import JsonResponse
 
 from library.forms import IssueBookForm
-from django.shortcuts import redirect, render,HttpResponse
+from django.shortcuts import redirect, render,HttpResponse,HttpResponseRedirect
 
 from library.utils import set_pagination 
 from .models import *
@@ -189,12 +189,12 @@ def delete_student(request, myid):
 
 
 # @login_required(login_url = '/student_login')
-# def student_books_search(request):
+# def student_books_list(request):
 #     books = Book.objects.all()
-#     return render(request, "student_books_search.html", {'books':books,'title':"Book Search"})
+#     return render(request, "student_books_list.html", {'books':books,'title':"Book Search"})
 
 @login_required(login_url = '/student_login')
-def student_books_search(request):
+def student_books_list(request):
         context = {'segment': 'transactions'}
         filter_params = None
         search = request.GET.get('search')
@@ -214,25 +214,31 @@ def student_books_search(request):
         f_book = Favourite.objects.filter(student_id=request.user.id)
         for i in f_book:
             favouritBook.append(int(i.book_id))
-        
-
         transactions = bookObject.filter(filter_params).order_by('id') if filter_params else bookObject.get_queryset().order_by('id')
         booklist, context['info'] = set_pagination(request, transactions)
-        return render(request, 'student_books_search.html',{'booklists':booklist,'title':'Book List','favouritBook':favouritBook,'searchkey':search})
+        return render(request, 'student_books_list.html',{'booklists':booklist,'title':'Book List','favouritBook':favouritBook,'searchkey':search})
 
 
+@login_required(login_url = '/student_login')
+def student_books_search(request):
+    search = request.GET.get('searchkey')
+
+    books = Book.objects.raw('''
+        SELECT library_book.* FROM library_book
+        WHERE library_book.title LIKE "%'''+search+'''%" OR  library_book.authors LIKE "%'''+search+'''%" OR  library_book.isbn LIKE "%'''+search+'''%"
+        ''')
+    booklist, info = set_pagination(request, books)
+    return render(request, "student_rec_book.html", {'bookslist':booklist,'title':"Search Result for : '"+search+"'"})
 
 @login_required(login_url = '/student_login')
 def recommended(request):
     favourite = Book.objects.raw('''
         SELECT library_book.* FROM library_book WHERE category IN (SELECT library_book.category
         FROM library_favourite LEFT JOIN library_book ON library_book.id=library_favourite.book_id WHERE student_id='''+ str(request.user.id) +''' 
-        GROUP BY library_book.id)
+        GROUP BY library_book.id) ORDER BY RAND() LIMIT 50
         ''')
-
-    for fav in favourite:
-        print(fav)
-    return render(request, "student_rec_book.html", {'bookslist':favourite,'title':"Recommended Book"})
+    booklist, info = set_pagination(request, favourite)
+    return render(request, "student_rec_book.html", {'bookslist':booklist,'title':"Recommended Book"})
 
 
 
@@ -260,13 +266,15 @@ def student_add_favourite(request):
     book_id = request.GET['book_id']
     Favourite.objects.filter(student_id=request.user.id,book_id=book_id).delete()
     Favourite.objects.create(student_id=request.user.id,book_id=book_id)
-    return redirect("/student_books_search")
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+    
 
 @login_required(login_url = '/student_login')
 def student_delete_favourite(request):
     book_id = request.GET['book_id']
-    Favourite.objects.filter(student_id=request.user.id,id=book_id).delete()
-    return redirect("/student_favourite_book")
+    Favourite.objects.filter(student_id=request.user.id,book_id=book_id).delete()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+    # return redirect("/student_favourite_book")
 
 def student_favourite_book(request):
     
@@ -275,7 +283,7 @@ def student_favourite_book(request):
     for i in f_book:
         iBooks = Book.objects.filter(id=i.book_id)
         for book in iBooks:
-            t=(book.title,book.authors,i.id)
+            t=(book.title,book.authors,i.book_id)
             li1.append(t)
     return render(request, "student_favourite_book.html",{'li1':li1, 'title':'Favourite Books'})
 

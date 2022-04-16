@@ -4,6 +4,8 @@ from urllib.parse import urlencode
 from django.core.paginator import Paginator
 from django.template.loader import render_to_string
 
+from library.models import Book
+
 
 def set_pagination(request, items, item_numer=20):
     if not items:
@@ -42,3 +44,12 @@ def set_pagination(request, items, item_numer=20):
     context = dict(items=items, page_range=page_range, last=pages_number, url_params=urlencode(url_params))
     items.pagination = render_to_string('partal/pagination.html', context)
     return items, {'current_page': page, 'items': item_len, 'items_on_page': item_numer}
+
+
+
+def bookdetail(request, books):
+    similar = Book.objects.raw('''
+        SELECT library_book.* FROM library_book WHERE category='''+books.category+'''" ORDER BY RAND() LIMIT 10
+        ''')
+    page = render_to_string('partal/bookdetail.html', {'similar':similar})
+    return page

@@ -11,7 +11,7 @@
                         <li class="page-item active">
                             <a class="page-link">{{ page_number }}</a>
                         </li>
-                    {% else %}
+                    {% elif page_number > 0 %}
                         <li class="page-item">
                             <a class="page-link" {% if page_number != '...' %}href="?page={{ page_number }}{% if url_params %}&{{ url_params }}{% endif %}"{% endif %}>{{ page_number }}</a>
                         </li>
