@@ -3,9 +3,12 @@ import csv
 
 from django.core.files.base import ContentFile
 from django.core.files.storage import FileSystemStorage
+from django.http import JsonResponse
 
 from library.forms import IssueBookForm
 from django.shortcuts import redirect, render,HttpResponse
+
+from library.utils import set_pagination 
 from .models import *
 from .forms import IssueBookForm
 from django.contrib.auth import authenticate, login, logout
@@ -13,6 +16,7 @@ from . import forms, models
 from django.db.models import Q
 from datetime import date
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 fs = FileSystemStorage(location='tmp/')
 
 def index(request):
@@ -106,7 +110,26 @@ def view_books(request):
     books = Book.objects.all()
     return render(request, "view_books.html", {'books':books,'title':'Book List'})
 
+@login_required(login_url = '/admin_login')
+def getbooks(request):
+        print(request)
+        context = {'segment': 'transactions'}
+        filter_params = None
+        search = request.GET.get('search')
+        bookObject = Book.objects
+        if search:
+            filter_params = None
+            if search.strip():
+                filter_params = Q(title=search.strip())
+                filter_params |= Q(authors=search.strip())
+                filter_params |= Q(isbn=search.strip())
+                filter_params |= Q(category=search.strip())
 
+        transactions = bookObject.filter(filter_params) if filter_params else bookObject.all()
+        context['transactions'], context['info'] = set_pagination(request, transactions)
+        if not context['transactions']:
+            return False, context['info']
+        return render(context, 'listbook.html')
 
 
 @login_required(login_url = '/admin_login')

@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path,re_path
 from . import views
 
 urlpatterns = [
@@ -7,6 +7,7 @@ urlpatterns = [
     path("upload_book/", views.upload_book, name="upload_book"),
     path("add_book/", views.add_book, name="add_book"),
     path("view_books/", views.view_books, name="view_books"),
+    re_path(r'^getbooks/(?:(?P<pk>\d+)/)?(?:(?P<action>\w+)/)?', views.getbooks,name='getbooks'),
     path("view_students/", views.view_students, name="view_students"),
     path("issue_book/", views.issue_book, name="issue_book"),
     path("view_issued_book/", views.view_issued_book, name="view_issued_book"),
