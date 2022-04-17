@@ -8,7 +8,7 @@ from django.http import JsonResponse
 from library.forms import IssueBookForm
 from django.shortcuts import redirect, render,HttpResponse,HttpResponseRedirect
 
-from library.utils import set_pagination 
+from library.utils import getbookdetail, set_pagination 
 from .models import *
 from .forms import IssueBookForm
 from django.contrib.auth import authenticate, login, logout
@@ -21,6 +21,14 @@ fs = FileSystemStorage(location='tmp/')
 
 def index(request):
     return render(request, "index.html")
+
+def home_books_view(request):
+    book_id = request.GET.get('book_id')
+    bookd = Book.objects.filter(id=book_id)
+    book=bookd[0]
+    bookresult = getbookdetail(request,book)
+    return render(request, "home_bookview.html", {'bookresult':bookresult,'title':book.title})
+
 
 def book_list(request):
     bookslist = Book.objects.order_by("?")[:100]
@@ -114,18 +122,18 @@ def getbooks(request):
         if search:
             filter_params = None
             if search.strip():
-                filter_params = Q(title=search.strip())
-                # filter_params |= Q(authors=search.strip())
-                # filter_params |= Q(isbn=search.strip())
-                # filter_params |= Q(category=search.strip())
+                filter_params = Q(title__contains=search.strip())
+                filter_params |= Q(authors__contains=search.strip())
+                filter_params |= Q(isbn__contains=search.strip())
+                filter_params |= Q(category__contains=search.strip())
+        else:
+            search=''
         
         transactions = bookObject.filter(filter_params).order_by('id') if filter_params else bookObject.get_queryset().order_by('id')
         # print(transactions)
         
-        booklist,pagination, context['info'] = set_pagination(request, transactions)
-        if not booklist:
-            return False, context['info']
-        return render(request, 'listbook.html',{'booklists':booklist,'pagination':pagination,'title':'Book List'})
+        booklist, context['info'] = set_pagination(request, transactions)
+        return render(request, 'listbook.html',{'booklists':booklist,'title':'Book List','searchkey':search})
 
 
 @login_required(login_url = '/admin_login')
@@ -138,32 +146,94 @@ def view_students(request):
 def issue_book(request):
     form = forms.IssueBookForm()
     if request.method == "POST":
-        form = forms.IssueBookForm(request.POST)
-        if form.is_valid():
             obj = models.IssuedBook()
             obj.student_id = request.POST['name2']
-            obj.isbn = request.POST['isbn2']
+            obj.book_id = request.POST['isbn2']
             obj.save()
             alert = True
             return render(request, "issue_book.html", {'obj':obj, 'alert':alert})
     return render(request, "issue_book.html", {'form':form,'title':"Issue Books"})
 
 @login_required(login_url = '/admin_login')
+def search_book_issue(request):
+    search=request.GET.get("q")
+    filter_params = None
+    bookObject = Book.objects
+    if search:
+            filter_params = None
+            if search.strip():
+                filter_params = Q(title__contains=search.strip())
+                filter_params |= Q(authors__contains=search.strip())
+                filter_params |= Q(isbn__contains=search.strip())
+                filter_params |= Q(category__contains=search.strip())
+    booklist = bookObject.filter(filter_params).order_by('id')[0:20] if filter_params else bookObject.get_queryset().order_by('id')[0:20]
+    bookitem=[]
+    for book in booklist:
+        bookitem.append({
+            "id":book.id,
+            "title":book.title,
+            "category":book.category,
+            "isbn":book.isbn,
+            "average_rating":book.average_rating,
+            "image_url":book.image_url
+        })
+
+    result={
+        "total_count":len(booklist),
+        "incomplete_results":False,
+        "items":bookitem
+    }
+    return JsonResponse(result)
+
+@login_required(login_url = '/admin_login')
+def search_student_issue(request):
+    search=request.GET.get("q")
+    filter_params = None
+    studentObject = Student.objects
+    if search:
+            filter_params = None
+            if search.strip():
+                filter_params = Q(user__first_name__contains=search.strip())
+                filter_params |= Q(user__last_name__contains=search.strip())
+                filter_params |= Q(user__username__contains=search.strip())
+    studentlist = studentObject.filter(filter_params).order_by('id')[0:20] if filter_params else studentObject.get_queryset().order_by('id')[0:20]
+    studentitem=[]
+    for user in studentlist:
+        studentitem.append({
+            "id":user.id,
+            "name":user.user.first_name+" "+user.user.last_name,
+            "class":user.classroom,
+            "roll_no":user.roll_no,
+            "phone":user.phone
+        })
+    result={
+        "total_count":len(studentlist),
+        "incomplete_results":False,
+        "items":studentitem
+    }
+    return JsonResponse(result)
+
+
+@login_required(login_url = '/admin_login')
 def view_issued_book(request):
     issuedBooks = IssuedBook.objects.all()
     details = []
     for i in issuedBooks:
+        print(i)
         days = (date.today()-i.issued_date)
         d=days.days
         fine=0
         if d>14:
             day=d-14
             fine=day*5
-        books = list(models.Book.objects.filter(isbn=i.isbn))
-        students = list(models.Student.objects.filter(user=i.student_id))
+        books = list(models.Book.objects.filter(id=i.book_id))
+        students = list(models.Student.objects.filter(id=i.student_id))
+        if(len(books)==0 or len(students)==0):
+            # i.delete()
+            continue
         j=0
         for l in books:
-            t=(students[j].user,students[j].user_id,books[j].name,books[j].isbn,i.issued_date,i.expiry_date,fine,i.id)
+            t=(students[j].user,students[j].user_id,books[j].title,books[j].isbn,i.issued_date,i.expiry_date,fine,i.id)
             j=j+1
             details.append(t)
     return render(request, "view_issued_book.html", {'details':details,'title':"View Issued Books"})
@@ -172,20 +242,23 @@ def view_issued_book(request):
 def delete_issue(request, myid):
     books = IssuedBook.objects.filter(id=myid)
     books.delete()
-    return redirect("/view_issued_book")
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+    
 
 @login_required(login_url = '/admin_login')
 def delete_book(request, myid):
     books = Book.objects.filter(id=myid)
     books.delete()
-    return redirect("/view_books")
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+    
 
 @login_required(login_url = '/admin_login')
 def delete_student(request, myid):
     students = Student.objects.filter(id=myid)
-    # students.user.delete()
+    students.user.delete()
     students.delete()
-    return redirect("/view_students")
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+    
 
 
 # @login_required(login_url = '/student_login')
@@ -230,6 +303,15 @@ def student_books_search(request):
     booklist, info = set_pagination(request, books)
     return render(request, "student_rec_book.html", {'bookslist':booklist,'title':"Search Result for : '"+search+"'"})
 
+
+@login_required(login_url = '/student_login')
+def student_books_view(request):
+    book_id = request.GET.get('book_id')
+    bookd = Book.objects.filter(id=book_id)
+    book=bookd[0]
+    bookresult = getbookdetail(request,book)
+    return render(request, "student_book_view.html", {'bookresult':bookresult,'title':book.title})
+
 @login_required(login_url = '/student_login')
 def recommended(request):
     favourite = Book.objects.raw('''
@@ -245,7 +327,7 @@ def recommended(request):
 @login_required(login_url = '/student_login')
 def student_issued_books(request):
     student = Student.objects.filter(user_id=request.user.id)
-    issuedBooks = IssuedBook.objects.filter(student_id=student[0].user_id)
+    issuedBooks = IssuedBook.objects.filter(student_id=student[0].id)
     li1 = []
     for i in issuedBooks:
         days=(date.today()-i.issued_date)
@@ -254,9 +336,9 @@ def student_issued_books(request):
         if d>15:
             day=d-14
             fine=day*5
-        books = Book.objects.filter(isbn=i.isbn)
+        books = Book.objects.filter(id=i.book_id)
         for book in books:
-            t=(request.user.id, request.user.get_full_name, book.name,book.author,issuedBooks[0].issued_date, issuedBooks[0].expiry_date, fine)
+            t=(request.user.id, request.user.get_full_name, book.title,book.authors,issuedBooks[0].issued_date, issuedBooks[0].expiry_date, fine)
             li1.append(t)
     return render(request,'student_issued_books.html',{'li1':li1,'title':"Issued Books"})
 

@@ -1,6 +1,6 @@
 <link rel="stylesheet" type="text/css" href="/static/css/bookdetail.css" />
 <div class="row  mb--60">
-    <div class="col-lg-5 mb--30">
+    <div class="col-lg-3 mb--30">
         <!-- Product Details Slider Big Image-->
         <div>
             <div style="width: 100%; display: inline-block;">
@@ -12,7 +12,7 @@
     </div>
     <div class="col-lg-7">
         <div class="product-details-info pl-lg--30 ">
-            <h3 class="product-title">{{book.title}}</h3>
+            <h3>{{book.title}}</h3>
             <ul class="list-unstyled">
                 <li>Category: <span class="list-value">{{book.category}}</span></li>
                 <li>Author: <span class="list-value">{{book.authors}}</span></li>
@@ -29,29 +29,31 @@
     </div>
 </div>
 
-<h1>Similar Books</h1>
+<h3>Similar Books</h3>
 <hr />
 <div class="row">
     {% for similar in similarlist %}
     <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
         <!-- Card-->
-        <div class="card rounded shadow-sm border-0"
-            style="height:400px;background-image: url('{{book.image_url}}');background-repeat: no-repeat;background-size: cover;height:250px">
-            <div class="card-body p-2" style="color: #fff; margin-top: 130px; background-color: #000000a3">
-                <h6>
-                    <a href="#" class="text-white text-ellipsis">{{similar.title}}</a>
-                </h6>
-                <div class="small text-white font-italic text-ellipsis">
-                    {{similar.authors}}
-                </div>
-                <div>{{similar.publication_date}}</div>
-                <div class="Stars" style="--rating: {{similar.average_rating}};"
-                    aria-label="Rating of this product is 2.3 out of 5."></div>({{similar.average_rating}})
-                <div class="small text-white font-italic text-ellipsis">
-                    {{similar.category}}
+        <a href="{{book_url}}?book_id={{similar.id}}">
+            <div class="card rounded shadow-sm border-0"
+                style="height:400px;background-image: url('{{similar.image_url}}');background-repeat: no-repeat;background-size: cover;height:250px">
+                <div class="card-body p-2" style="color: #fff; margin-top: 130px; background-color: #000000a3">
+                    <h6>
+                        <span class="text-white text-ellipsis">{{similar.title}}</span>
+                    </h6>
+                    <div class="small text-white font-italic text-ellipsis">
+                        {{similar.authors}}
+                    </div>
+                    <div>{{similar.publication_date}}</div>
+                    <div class="Stars" style="--rating: {{similar.average_rating}};"
+                        aria-label="Rating of this product is 2.3 out of 5."></div>({{similar.average_rating}})
+                    <div class="small text-white font-italic text-ellipsis">
+                        {{similar.category}}
+                    </div>
                 </div>
             </div>
-        </div>
+        </a>
     </div>
     {% endfor %}
 </div>
@@ -79,5 +81,4 @@
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
     }
-    
 </style>

@@ -42,6 +42,9 @@ def expiry():
 class IssuedBook(models.Model):
     id = models.AutoField(primary_key=True)
     student_id = models.CharField(max_length=100, blank=True) 
-    isbn = models.CharField(max_length=13)
+    book_id = models.CharField(max_length=13)
     issued_date = models.DateField(auto_now=True)
     expiry_date = models.DateField(default=expiry)
+
+    def __str__(self):
+        return str(self.student_id) + " ["+str(self.book_id)+']' + " ["+str(self.issued_date)+']'

@@ -9,7 +9,7 @@ from library.models import Book
 
 def set_pagination(request, items, item_numer=20):
     if not items:
-        return True, "These is no items"
+        return [], "These is no items"
 
     params = request.GET
     item_len = len(items)
@@ -47,9 +47,9 @@ def set_pagination(request, items, item_numer=20):
 
 
 
-def bookdetail(request, books):
+def getbookdetail(request,book):
     similar = Book.objects.raw('''
-        SELECT library_book.* FROM library_book WHERE category='''+books.category+'''" ORDER BY RAND() LIMIT 10
+        SELECT library_book.* FROM library_book WHERE category="'''+book.category+'''" ORDER BY RAND() LIMIT 12
         ''')
-    page = render_to_string('partal/bookdetail.html', {'similar':similar})
+    page = render_to_string('partal/bookdetail.html', {'book':book,'similarlist':similar,'book_url':request.path})
     return page

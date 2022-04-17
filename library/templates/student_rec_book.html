@@ -9,23 +9,25 @@
         {% for book in bookslist %}
         <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
             <!-- Card-->
-            <div class="card rounded shadow-sm border-0"
-                style="height:400px;background-image: url('{{book.image_url}}');background-repeat: no-repeat;background-size: cover;height:250px">
-                <div class="card-body p-2" style="color: #fff; margin-top: 130px; background-color: #000000a3">
-                    <h6>
-                        <a href="#" class="text-white text-ellipsis">{{book.title}}</a>
-                    </h6>
-                    <div class="small text-white font-italic text-ellipsis">
-                        {{book.authors}}
-                    </div>
-                    <div>{{book.publication_date}}</div>
-                    <div class="Stars" style="--rating: {{book.average_rating}};"
-                        aria-label="Rating of this product is 2.3 out of 5."></div>({{book.average_rating}})
-                    <div class="small text-white font-italic text-ellipsis">
-                        {{book.category}}
+            <a href="/student_books_view/?book_id={{book.id}}">
+                <div class="card rounded shadow-sm border-0"
+                    style="height:400px;background-image: url('{{book.image_url}}');background-repeat: no-repeat;background-size: cover;height:250px">
+                    <div class="card-body p-2" style="color: #fff; margin-top: 130px; background-color: #000000a3">
+                        <h6>
+                            <span class="text-white text-ellipsis">{{book.title}}</span>
+                        </h6>
+                        <div class="small text-white font-italic text-ellipsis">
+                            {{book.authors}}
+                        </div>
+                        <div>{{book.publication_date}}</div>
+                        <div class="Stars" style="--rating: {{book.average_rating}};"
+                            aria-label="Rating of this product is 2.3 out of 5."></div>({{book.average_rating}})
+                        <div class="small text-white font-italic text-ellipsis">
+                            {{book.category}}
+                        </div>
                     </div>
                 </div>
-            </div>
+            </a>
         </div>
         {% endfor %}
     </div>

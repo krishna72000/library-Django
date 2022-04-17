@@ -1,142 +1,151 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link href="https://fonts.gstatic.com" rel="preconnect">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
-  
-    <!-- Vendor CSS Files -->
-    <link href="/static/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/static/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-    <link href="/static/assets/vendor/simple-datatables/style.css" rel="stylesheet">
-  
-    <!-- Template Main CSS File -->
-    <link href="/static/assets/css/style.css" rel="stylesheet">
-    <title>{{title}}</title>
-    {% block css %}
-    {% endblock %}
-  </head>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link
+    href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+    rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="/static/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/static/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="/static/assets/vendor/simple-datatables/style.css" rel="stylesheet">
+
+  <link href="/static/assets/css/select2.css" rel="stylesheet" />
+  <!-- Template Main CSS File -->
+  <link href="/static/assets/css/style.css" rel="stylesheet">
+  <script src="/static/assets/js/jquery.min.js"></script>
+  <script src="/static/assets/js/select2.min.js"></script>
+  <title>{{title}}</title>
+  {% block css %}
+  {% endblock %}
+</head>
+
+<body>
+
   <body>
-    <body>
 
-      <!-- ======= Header ======= -->
-      <header id="header" class="header fixed-top d-flex align-items-center">
-    
-        <div class="d-flex align-items-center justify-content-between">
-          <a href="/view_students" class="logo d-flex align-items-center">
-            <img src="/static/assets/img/logo.png" alt="">
-            <span class="d-none d-lg-block">BOOKHUB</span>
-          </a>
-          <i class="bi bi-list toggle-sidebar-btn"></i>
-        </div><!-- End Logo -->
-    
-        <!-- <div class="search-bar">
+    <!-- ======= Header ======= -->
+    <header id="header" class="header fixed-top d-flex align-items-center">
+
+      <div class="d-flex align-items-center justify-content-between">
+        <a href="/view_students" class="logo d-flex align-items-center">
+          <img src="/static/assets/img/logo.png" alt="">
+          <span class="d-none d-lg-block">BOOKHUB</span>
+        </a>
+        <i class="bi bi-list toggle-sidebar-btn"></i>
+      </div><!-- End Logo -->
+
+      <!-- <div class="search-bar">
           <form class="search-form d-flex align-items-center" method="POST" action="#">
             <input type="text" name="query" placeholder="Search" title="Enter search keyword">
             <button type="submit" title="Search"><i class="bi bi-search"></i></button>
           </form>
         </div> -->
-    
-        <nav class="header-nav ms-auto">
-          <ul class="d-flex align-items-center">
-    
-            <li class="nav-item d-block d-lg-none">
-              <a class="nav-link nav-icon search-bar-toggle " href="#">
-                <i class="bi bi-search"></i>
-              </a>
-            </li><!-- End Search Icon-->
-            <li class="nav-item dropdown pe-3">
-    
-              <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-                <i style="font-size: 25px;" class="bi bi-person-circle"></i>
-                <span class="d-none d-md-block dropdown-toggle ps-2">{{request.user}}</span>
-              </a><!-- End Profile Iamge Icon -->
-    
-              <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
-                <li class="dropdown-header">
-                  <h6>{{request.user}}</h6>
-                  <span>admin</span>
-                </li>
-                <li>
-                  <hr class="dropdown-divider">
-                </li>
-                <li>
-                  <a class="dropdown-item d-flex align-items-center" href="/logout">
-                    <i class="bi bi-box-arrow-right"></i>
-                    <span>Sign Out</span>
-                  </a>
-                </li>
-    
-              </ul><!-- End Profile Dropdown Items -->
-            </li><!-- End Profile Nav -->
-    
-          </ul>
-        </nav><!-- End Icons Navigation -->
-      </header>
-        <aside id="sidebar" class="sidebar">
-          <ul class="sidebar-nav" id="sidebar-nav">
-     
-            <li class="nav-item">
-              <a class="nav-link collapsed" href="/view_students">
-                <i class="bi bi-person"></i>
-                <span>Students</span>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link collapsed" href="/upload_book">
-                <i class="bi bi-download"></i><span>Upload Books</span>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link collapsed" href="/add_book">
-                <i class="bi bi-bookmark-plus-fill"></i><span>Add Books</span>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link collapsed" href="/getbooks">
-                <i class="bi bi-bookmark-fill"></i><span>Book List</span>
-              </a>
-            </li>
-              <li class="nav-item">
-                <a class="nav-link collapsed" href="/issue_book">
-                  <i class="bi bi-bookmark-star-fill"></i><span>Issue A Book</span>
-                 </a>
-              </li><!-- End Contact Page Nav -->
-            <li class="nav-item">
-              <a class="nav-link collapsed" href="/view_issued_book">
-                <i class="bi bi-bookmark-check-fill"></i><span>View Issued Books</span>
-              </a>
-            </li><!-- End Contact Page Nav -->
-          </ul>
-        </aside><!-- End Sidebar-->
-        <main id="main" class="main">
-          <div class="container mt-4 mb-5">
-            <div class="card">
-              <div class="card-header">
-                <h5>{{title}}</h5>
-              </div>
-              <div class="card-body">
-                {% block body %}
-                {% endblock %}
-              </div>
-            </div>
+
+      <nav class="header-nav ms-auto">
+        <ul class="d-flex align-items-center">
+
+          <li class="nav-item d-block d-lg-none">
+            <a class="nav-link nav-icon search-bar-toggle " href="#">
+              <i class="bi bi-search"></i>
+            </a>
+          </li><!-- End Search Icon-->
+          <li class="nav-item dropdown pe-3">
+
+            <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+              <i style="font-size: 25px;" class="bi bi-person-circle"></i>
+              <span class="d-none d-md-block dropdown-toggle ps-2">{{request.user}}</span>
+            </a><!-- End Profile Iamge Icon -->
+
+            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+              <li class="dropdown-header">
+                <h6>{{request.user}}</h6>
+                <span>admin</span>
+              </li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center" href="/logout">
+                  <i class="bi bi-box-arrow-right"></i>
+                  <span>Sign Out</span>
+                </a>
+              </li>
+
+            </ul><!-- End Profile Dropdown Items -->
+          </li><!-- End Profile Nav -->
+
+        </ul>
+      </nav><!-- End Icons Navigation -->
+    </header>
+    <aside id="sidebar" class="sidebar">
+      <ul class="sidebar-nav" id="sidebar-nav">
+
+        <li class="nav-item">
+          <a class="nav-link collapsed" href="/view_students">
+            <i class="bi bi-person"></i>
+            <span>Students</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link collapsed" href="/upload_book">
+            <i class="bi bi-download"></i><span>Upload Books</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link collapsed" href="/add_book">
+            <i class="bi bi-bookmark-plus-fill"></i><span>Add Books</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link collapsed" href="/getbooks">
+            <i class="bi bi-bookmark-fill"></i><span>Book List</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link collapsed" href="/issue_book">
+            <i class="bi bi-bookmark-star-fill"></i><span>Issue A Book</span>
+          </a>
+        </li><!-- End Contact Page Nav -->
+        <li class="nav-item">
+          <a class="nav-link collapsed" href="/view_issued_book">
+            <i class="bi bi-bookmark-check-fill"></i><span>View Issued Books</span>
+          </a>
+        </li><!-- End Contact Page Nav -->
+      </ul>
+    </aside><!-- End Sidebar-->
+    <main id="main" class="main">
+      <div class="container mt-4 mb-5">
+        <div class="card">
+          <div class="card-header">
+            <h5>{{title}}</h5>
           </div>
-        </main>
+          <div class="card-body">
+            {% block body %}
+            {% endblock %}
+          </div>
+        </div>
+      </div>
+    </main>
 
-        <!-- Vendor JS Files -->
-  <!-- <script src="/static/assets/vendor/apexcharts/apexcharts.min.js"></script> -->
-  <script src="/static/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <!-- <script src="/static/assets/vendor/echarts/echarts.min.js"></script>
+    <!-- Vendor JS Files -->
+    <!-- <script src="/static/assets/vendor/apexcharts/apexcharts.min.js"></script> -->
+    <script src="/static/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- <script src="/static/assets/vendor/echarts/echarts.min.js"></script>
   <script src="/static/assets/vendor/quill/quill.min.js"></script> -->
-  <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-  <script src="/static/assets/vendor/simple-datatables/simple-datatables.js"></script>
-  <script src="/static/assets/vendor/tinymce/tinymce.min.js"></script>
-  <!-- <script src="/static/assets/vendor/php-email-form/validate.js"></script> -->
+    <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="/static/assets/vendor/simple-datatables/simple-datatables.js"></script>
+    <script src="/static/assets/vendor/tinymce/tinymce.min.js"></script>
+    <!-- <script src="/static/assets/vendor/php-email-form/validate.js"></script> -->
 
-  <!-- Template Main JS File -->
-  <script src="/static/assets/js/main.js"></script>
-
+    <!-- Template Main JS File -->
+    <script src="/static/assets/js/main.js"></script>
+    {% block js %} {% endblock %}
   </body>
+
 </html>

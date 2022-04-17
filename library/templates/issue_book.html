@@ -4,27 +4,124 @@
 {% block css %}
 {% endblock %}
 {% block body %}
+
 <div>
     <form method="POST"> {% csrf_token %}
-        {% for i in form %}
         <div class="form-group">
             <br>
-          <label class="control-label col-xs-4">{{ i.label_tag }}</label>
-          <div class="col-xs-8 mt-2">
-          {{ i }}
-           </div>
+            <label class="control-label col-xs-4">Book [Name - ISBN]</label>
+            <div class="col-xs-8 mt-2">
+                <select name="isbn2" class="form-control" id="bookselectid" required>
+                </select>
+            </div>
         </div>
-        {% endfor %}
-    <button type="submit" class="btn btn-outline-primary mt-4">Issue Book</button>
+        <div class="form-group">
+            <br>
+            <label class="control-label col-xs-4">Student [Name]</label>
+            <div class="col-xs-8 mt-2">
+                <select name="name2" class="form-control" id="studentselectid" required>
+                </select>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-outline-primary mt-4">Issue Book</button>
 </div>
 </form>
 {% endblock %}
 {% block js %}
 <script>
+    function formatRepo(repo) {
+        if (repo.loading) {
+            return repo.text;
+        }
+
+        var $container = $(
+            "<div class='select2-result-repository clearfix'>" +
+            "<div class='select2-result-repository__avatar'><img src='" + repo.image_url + "' /></div>" +
+            "<div class='select2-result-repository__meta'>" +
+            "<div class='select2-result-repository__title'></div>" +
+            "<div class='select2-result-repository__description'></div>" +
+            "<div class='select2-result-repository__statistics'>" +
+            "<div class='select2-result-repository__forks'><i class='fa fa-flash'></i> </div>" +
+            "<div class='select2-result-repository__stargazers'><i class='fa fa-star'></i> </div>" +
+            "</div>" +
+            "</div>" +
+            "</div>"
+        );
+
+        $container.find(".select2-result-repository__title").text(repo.title);
+        $container.find(".select2-result-repository__description").text("ISBN : " + repo.isbn);
+        $container.find(".select2-result-repository__forks").append("Catrgory : [" + repo.category + "] ");
+        $container.find(".select2-result-repository__stargazers").append("Stars : [" + repo.average_rating + "]");
+
+        return $container;
+    }
+
+    function formatRepo2(repo) {
+        if (repo.loading) {
+            return repo.text;
+        }
+
+        var $container = $(
+            "<div class='select2-result-repository clearfix'>" +
+            "<div class='select2-result-repository__meta'>" +
+            "<div class='select2-result-repository__title'></div>" +
+            "<div class='select2-result-repository__description'></div>" +
+            "<div class='select2-result-repository__statistics'>" +
+            "<div class='select2-result-repository__forks'><i class='fa fa-flash'></i> </div>" +
+            "<div class='select2-result-repository__stargazers'><i class='fa fa-star'></i> </div>" +
+            "</div>" +
+            "</div>" +
+            "</div>"
+        );
+
+        $container.find(".select2-result-repository__title").text(repo.name);
+        $container.find(".select2-result-repository__description").text("ISBN : " + repo.class);
+        $container.find(".select2-result-repository__forks").append("Catrgory : [" + repo.roll_no + "] ");
+        $container.find(".select2-result-repository__stargazers").append("Stars : [" + repo.phone + "]");
+
+        return $container;
+    }
+
+
+    var formatRepoSelection = function (repo) {
+        return repo.title + " - [" + repo.isbn + "]";
+    }
+    var formatRepoSelection2 = function (repo) {
+        return repo.name + " - [" + repo.roll_no + "]";
+    }
+    $('#bookselectid').select2({
+        templateResult: formatRepo,
+        templateSelection: formatRepoSelection,
+        minimumInputLength: 2,
+        ajax: {
+            url: '/search_book_issue',
+            dataType: 'json',
+            delay: 250,
+            processResults: function (data) {
+                return {
+                    results: data.items
+                };
+            }
+        }
+    });
+    $('#studentselectid').select2({
+        templateResult: formatRepo2,
+        templateSelection: formatRepoSelection2,
+        minimumInputLength: 2,
+        ajax: {
+            url: '/search_student_issue',
+            dataType: 'json',
+            delay: 250,
+            processResults: function (data) {
+                return {
+                    results: data.items
+                };
+            }
+        }
+    });
     {% if alert %}
     alert("Book Successfully Issued.")
     document.location = "/issue_book"
     {% endif %}
 </script>
 {% endblock %}
-
