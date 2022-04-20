@@ -1,65 +1,167 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <!-- <link rel="stylesheet" href="css/demo.css" />
-    <link rel="stylesheet" href="css/style1.css" />
-    <link rel="stylesheet" href="/static/assets/css/bootstrap.css" crossorigin="anonymous"> -->
 
-    <link
-      href="/static/assets/vendor/bootstrap/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <link
-      href="/static/assets/vendor/bootstrap-icons/bootstrap-icons.css"
-      rel="stylesheet"
-    />
-    <link href="/static/assets/css/style.css" rel="stylesheet" />
-    <title>{{title}}</title>
-    {% block css %} {% endblock %}
-  </head>
-  <body>
-    <header id="header" class="header fixed-top d-flex align-items-center">
-      <div class="d-flex align-items-center justify-content-between">
-        <a href="/" class="logo d-flex align-items-center">
-          <img src="/static/assets/img/logo.png" alt="" />
-          <span class="d-none d-lg-block">BOOKHUB</span>
-        </a>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+  <link href="/static/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="/static/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
+  <link href="/static/assets/css/style.css" rel="stylesheet" /> -->
+  <title>{{title}}</title>
+  {% block css %} {% endblock %}
+</head>
+
+<body>
+  <header id="header" class="header fixed-top d-flex align-items-center">
+    <div class="d-flex align-items-center justify-content-between">
+      <a href="/" class="logo d-flex align-items-center">
+        <img src="/static/assets/img/logo.png" alt="" />
+        <span class="d-none d-lg-block">BOOKHUB</span>
+      </a>
+    </div>
+    <!-- End Logo -->
+    <div class="search-bar">
+      <form class="search-form d-flex align-items-center" method="GET" action="/book_list">
+        <input type="text" name="searchkey" placeholder="Search" title="Enter search keyword">
+        <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+      </form>
+    </div><!-- End Search Bar -->
+    <nav class="header-nav ms-auto">
+      <ul class="d-flex align-items-center">
+        <li class="nav-item">
+          <a class="nav-link" href="/book_list">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/admin_login">Admin Login</a>
+        </li>
+        <!-- End Search Icon-->
+        <li class="nav-item d-block">
+          <a class="nav-link" href="/student_login">Student Login</a>
+        </li>
+        <!-- End Search Icon-->
+        <li class="nav-item d-block">
+          <a class="nav-link" href="/student_registration">Register As Student</a>
+        </li>
+        <!-- End Search Icon-->
+      </ul>
+    </nav>
+    <!-- End Icons Navigation -->
+  </header>
+  <!-- End Header -->
+  <main>
+    <section class="section" style="margin-top: 80px">
+      {% block body %} {% endblock %}
+    </section>
+  </main>
+  <footer class="page-footer font-small "
+    style="padding-left: 0px;color:#fff;background-color: #1c2331;padding-top: 20px">
+
+    <!-- Footer Links -->
+    <div class="container text-center text-md-left ">
+
+      <!-- Grid row -->
+      <div class="row mt-3">
+
+        <!-- Grid column -->
+        <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+
+          <!-- Content -->
+          <h6 class="text-uppercase font-weight-bold">BOOKHUB.COM</h6>
+          <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
+          <p>Bookhub is a online book recommendation system. We will recommend you book that are available on our site
+            based on your interest. So signup and login into our site to read your favorite books today. Its all FREE
+          </p>
+
+        </div>
+        <!-- Grid column -->
+
+        <!-- Grid column -->
+        <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+
+          <!-- Links -->
+          <h6 class="text-uppercase font-weight-bold">Products</h6>
+          <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
+          <p>
+            <a href="#!">Genre</a>
+          </p>
+          <p>
+            <a href="#!">Recommendation</a>
+          </p>
+          <p>
+            <a href="#!">Books</a>
+          </p>
+          <p>
+            <a href="#!">Account</a>
+          </p>
+
+        </div>
+        <!-- Grid column -->
+
+        <!-- Grid column -->
+        <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+
+          <!-- Links -->
+          <h6 class="text-uppercase font-weight-bold">Useful links</h6>
+          <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
+          <p>
+            <a href="/">Home</a>
+          </p>
+          <p>
+            <a href="/student_registration">Student Register</a>
+          </p>
+          <p>
+            <a href="/student_login">Student Login</a>
+          </p>
+          <p>
+            <a href="/admin_login">Admin Login</a>
+          </p>
+
+        </div>
+        <!-- Grid column -->
+
+        <!-- Grid column -->
+        <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+
+          <!-- Links -->
+          <h6 class="text-uppercase font-weight-bold">Contact</h6>
+          <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
+          <p>
+            <i class="fas fa-home mr-3"></i> Kathamandu, Nepal
+          </p>
+          <p>
+            <i class="fas fa-envelope mr-3"></i> info@bookhub.com
+          </p>
+          <p>
+            <i class="fas fa-phone mr-3"></i> + 01 234 567 88
+          </p>
+          <p>
+            <i class="fas fa-print mr-3"></i> + 01 234 567 89
+          </p>
+
+        </div>
+        <!-- Grid column -->
+
       </div>
-      <!-- End Logo -->
+      <!-- Grid row -->
 
-      <nav class="header-nav ms-auto">
-        <ul class="d-flex align-items-center">
-          <li class="nav-item">
-            <a class="nav-link" href="/book_list">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/admin_login">Admin Login</a>
-          </li>
-          <!-- End Search Icon-->
-          <li class="nav-item d-block">
-            <a class="nav-link" href="/student_login">Student Login</a>
-          </li>
-          <!-- End Search Icon-->
-          <li class="nav-item d-block">
-            <a class="nav-link" href="/student_registration">Register As Student</a>
-          </li>
-          <!-- End Search Icon-->
-        </ul>
-      </nav>
-      <!-- End Icons Navigation -->
-    </header>
-    <!-- End Header -->
-    <main>
-      <section class="section" style="margin-top: 80px">
-        {% block body %} {% endblock %}
-      </section>
-    </main>
+    </div>
+    <!-- Footer Links -->
 
-    <script src="/static/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="/static/assets/vendor/php-email-form/validate.js"></script>
-    <!-- <script src="/static/js/bootstrap.js" crossorigin="anonymous"></script> -->
-    {% block js %} {% endblock %}
-  </body>
+    <!-- Copyright -->
+    <div class="footer-copyright text-center py-3" style="background-color: #000;">© 2022 Copyright:
+      <a href="/"> BOOKHUB</a>
+    </div>
+    <!-- Copyright -->
+
+  </footer>
+  <script src="/static/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- <script src="/static/assets/vendor/php-email-form/validate.js"></script> -->
+  <!-- <script src="/static/js/bootstrap.js" crossorigin="anonymous"></script> -->
+  {% block js %} {% endblock %}
+</body>
+
 </html>
