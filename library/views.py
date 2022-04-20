@@ -86,7 +86,9 @@ def upload_book(request):
         next(reader)
 
         book_list = []
+        # try:
         for id_, row in enumerate(reader):
+            print(row)
             (
                 id,
                 title,
@@ -114,6 +116,9 @@ def upload_book(request):
                     image_url=image_url
                 )
             )
+        # except:
+        #     print("error")
+
         Book.objects.bulk_create(book_list)
         alert = True
         return render(request, "add_ubook.html", {'alert': alert, 'title': 'Upload Book'})

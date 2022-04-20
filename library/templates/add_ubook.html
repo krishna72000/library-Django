@@ -6,13 +6,13 @@
 {% block body %}
 <div class="container">
     <form method="POST" enctype="multipart/form-data"> {% csrf_token %}
-    <div class="row mt-4">
-        <div class="form-group col-md-12">
-            <label><i style="font-weight: bold;">Upload Book</i></label>
-            <input type="file" class="form-control mt-2" name="csvbook" placeholder="Upload Book" required>
+        <div class="row mt-4">
+            <div class="form-group col-md-12">
+                <label><i style="font-weight: bold;">Upload Book</i></label>
+                <input type="file" class="form-control mt-2" name="csvbook" placeholder="Upload Book" required>
+            </div>
         </div>
-    </div>
-    <button type="submit" class="btn btn-outline-primary mt-4">Upload Book</button>
+        <button type="submit" class="btn btn-outline-primary mt-4">Upload Book</button>
 </div>
 </form>
 {% endblock %}
@@ -20,7 +20,7 @@
 <script>
     {% if alert %}
     alert("Book is upload successfully.")
-    document.location = "/view_books"
+    document.location = "/getbooks"
     {% endif %}
 </script>
 {% endblock %}
